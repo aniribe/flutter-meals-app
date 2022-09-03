@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/meal.dart';
+import '../screens/meal_details_screen.dart';
 
 class MealItem extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
   final int duration;
@@ -12,14 +14,13 @@ class MealItem extends StatelessWidget {
 
   const MealItem({
     Key? key,
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.duration,
     required this.affordability,
     required this.complexity,
   }) : super(key: key);
-
-  void selectMeal() {}
 
   String get complexityText {
     switch (complexity) {
@@ -47,10 +48,14 @@ class MealItem extends StatelessWidget {
     }
   }
 
+  void selectMeal(BuildContext context) {
+    Navigator.of(context).pushNamed(MealDetailsScreen.routeName, arguments: id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: selectMeal,
+      onTap: () => selectMeal(context),
       child: Card(
         margin: const EdgeInsets.all(10),
         shape: RoundedRectangleBorder(
