@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/meal.dart';
@@ -31,7 +30,7 @@ class MealItem extends StatelessWidget {
       case Complexity.Hard:
         return 'Hard';
       default:
-        return 'Unkown';
+        return 'Unknown';
     }
   }
 
@@ -44,12 +43,16 @@ class MealItem extends StatelessWidget {
       case Affordability.Pricey:
         return 'Pricey';
       default:
-        return 'Unkown';
+        return 'Unknown';
     }
   }
 
   void selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(MealDetailsScreen.routeName, arguments: id);
+    Navigator.of(context)
+        .pushNamed(MealDetailsScreen.routeName, arguments: id)
+        .then((value) {
+      if (value != null) {}
+    });
   }
 
   @override
@@ -106,7 +109,7 @@ class MealItem extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.schedule),
+                      const Icon(Icons.schedule),
                       const SizedBox(
                         width: 6,
                       ),
@@ -115,7 +118,7 @@ class MealItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.work),
+                      const Icon(Icons.work),
                       const SizedBox(
                         width: 6,
                       ),
@@ -124,7 +127,7 @@ class MealItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.attach_money),
+                      const Icon(Icons.attach_money),
                       const SizedBox(
                         width: 6,
                       ),

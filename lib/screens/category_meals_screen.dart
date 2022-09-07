@@ -1,43 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:meal_app_from_flutter_course/dummy_data.dart';
 import 'package:meal_app_from_flutter_course/widgets/meal_item.dart';
+import '../models/meal.dart';
 
-class CategoryMealsScreen extends StatelessWidget {
+class CategoryMealsScreen extends StatefulWidget {
   static const routeName = '/category-meals';
-  // final String categoryId;
-  // final String categoryTitle;
+
+  final List<Meal> availableMeals;
 
   const CategoryMealsScreen({
     Key? key,
-    // required this.categoryId,
-    // required this.categoryTitle,
+    required this.availableMeals,
   }) : super(key: key);
 
   @override
+  State<CategoryMealsScreen> createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+  String? categoryTitle;
+  List<Meal>? displayedMeals;
+  bool loadedInitData = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!loadedInitData) {
+      final routeArgs =
+          ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+
+      final String categoryId = routeArgs['id'] as String;
+      categoryTitle = routeArgs['title'] as String;
+      displayedMeals = widget.availableMeals
+          .where((meal) => meal.categoryIds.contains(categoryId))
+          .toList();
+      loadedInitData = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
+  void removeMeal(String mealId) {
+    setState(() {
+      displayedMeals?.removeWhere((meal) => meal.id == mealId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-
-    final String categoryId = routeArgs['id'] as String;
-    final String categoryTitle = routeArgs['title'] as String;
-    final categoryMeals = DUMMY_MEALS
-        .where((meal) => meal.categoryIds.contains(categoryId))
-        .toList();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(categoryTitle),
+        title: Text(categoryTitle as String),
       ),
       body: ListView.builder(
-          itemCount: categoryMeals.length,
+          itemCount: displayedMeals?.length,
           itemBuilder: (context, index) {
             return MealItem(
-              id: categoryMeals[index].id,
-              title: categoryMeals[index].title,
-              imageUrl: categoryMeals[index].imageUrl,
-              duration: categoryMeals[index].duration,
-              affordability: categoryMeals[index].affordability,
-              complexity: categoryMeals[index].complexity,
+              id: displayedMeals?[index].id as String,
+              title: displayedMeals?[index].title as String,
+              imageUrl: displayedMeals?[index].imageUrl as String,
+              duration: displayedMeals?[index].duration as int,
+              affordability:
+                  displayedMeals?[index].affordability as Affordability,
+              complexity: displayedMeals?[index].complexity as Complexity,
             );
           }),
     );

@@ -1,11 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meal_app_from_flutter_course/dummy_data.dart';
 
 class MealDetailsScreen extends StatelessWidget {
   static const routeName = '/meal-details';
 
-  const MealDetailsScreen({Key? key}) : super(key: key);
+  final Function(String) toggleFavorite;
+  final Function(String) isMealFavorite;
+
+  const MealDetailsScreen({
+    Key? key,
+    required this.toggleFavorite,
+    required this.isMealFavorite,
+  }) : super(key: key);
 
   Widget buildTitleSection(BuildContext context, String title) {
     return Container(
@@ -80,6 +86,10 @@ class MealDetailsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => toggleFavorite(mealId),
+        child: Icon(isMealFavorite(mealId) ? Icons.star : Icons.star_border),
       ),
     );
   }
